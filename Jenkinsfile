@@ -12,6 +12,8 @@ pipeline  {
     stage('Deploy with Ansible') {
       steps {
         echo "Deploy"
+        ls 
+        ansible-playbook install_war.yml
       }
     }
   }
