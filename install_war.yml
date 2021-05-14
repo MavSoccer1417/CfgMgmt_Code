@@ -3,7 +3,7 @@
   become: true
   vars:
   - warName: demo-0.0.1-SNAPSHOT.war
-  - warRemotePath: /home/tomcat
+  - warRemotePath: /home/ubuntu
 
   tasks:
   - name: Download WAR to server
@@ -21,16 +21,16 @@
     shell: "cp /usr/local/tomcat/webapps/{{ warName }} /home/tomcat/{{ bkpdate }}/"
     
   - name: Unzip WAR file
-    unarchive: src={{ warRemotePath }}/{{ warName }} dest=/usr/local/tomcat/webapps/ROOT/ copy=no mode=0755 owner=tomcat7 group=tomcat7
+    unarchive: src={{ warRemotePath }}/{{ warName }} dest=/usr/local/tomcat/webapps/ROOT/ copy=no mode=0755 owner=root group=root
     notify:
-        - restart tomcat7
+        - restart apache2
    
   - name: Delete remote war file
     file: path={{ warRemotePath }}/{{ warName }} state=absent
     
-  - name: wait for tomcat to start
+  - name: wait for apache2 to start
     wait_for: port=8080 timeout=60
     
   handlers:
-    - name: Restart tomcat7
-      service: name=tomcat7 state=restarted
+    - name: Restart apache2
+      service: name=apache2 state=restarted
